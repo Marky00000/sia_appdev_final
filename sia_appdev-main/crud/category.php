@@ -39,7 +39,7 @@
 
             <?php if(isset($edit_category_id)): ?>
             <button type="submit" name="update">Update</button>
-            <button type="button" onclick="location.href='http://localhost/crudes%203/crudes/category.php'">Cancel</button>
+            <button type="button" onclick="location.href='http://localhost/sia_appdev-main/crud/category.php'">Cancel</button>
             <?php else: ?>
             <button type="submit" name="save">Save</button>
             <?php endif; ?>
@@ -73,10 +73,26 @@
 
         if ($edit_result) {
             echo '<script>alert("Category successfully updated!");</script>';
-            header("Location: http://localhost/crudes%203/crudes/category.php");
+            header("Location: http://localhost/sia_appdev-main/crud/category.php");
             exit;
         } else {
             echo '<script>alert("Error updating category: ' . $conn->error . '");</script>';
+        }
+    }
+
+    if (isset($_GET['action']) && $_GET['action'] === 'delete') {
+        $delete_category_id = $_GET['category_id'];
+        
+        // Perform deletion query
+        $delete_sql = "DELETE FROM category WHERE category_id = '$delete_category_id'";
+        $delete_result = $conn->query($delete_sql);
+    
+        if ($delete_result) {
+            echo '<script>alert("Category successfully deleted!");</script>';
+            header("Location: http://localhost/sia_appdev-main/crud/category.php");
+            exit;
+        } else {
+            echo '<script>alert("Error deleting category: ' . $conn->error . '");</script>';
         }
     }
     ?>
@@ -113,7 +129,7 @@
                         <td><?php echo $row['category_id']; ?></td>
                         <td><?php echo $row['category']; ?></td>
                         <td>
-                            <a style="color: red" href="?action=delete&category_id=<?= $row['category_id'] ?>"> DELETE </a>
+                        <a style="color: red" href="?action=delete&category_id=<?= $row['category_id'] ?>"> DELETE </a>
                             <a style="color: blue" href="?action=edit&category_id=<?= $row['category_id'] ?>"> EDIT </a>
                         </td>
                     </tr>
